@@ -1,0 +1,27 @@
+<ion-view title="Wait Add" id="page3">
+  <ion-content padding="true" style="background: url(img/bGUS62MhRQ6AxvF7tEpz_splase.png) no-repeat center;background-size:cover;" class="has-header">
+    <form id="login-form3" class="list" ng-if="ask.id" >
+
+      <div class="list">
+        <div class="item item-thumbnail-left" href="#">
+          <img src="img/avatar.png">
+          <h2>{{ ask.lastname|lowercase }} {{ ask.firstname|lowercase }}</h2>
+          <h2>{{ ask.email|lowercase }}</h2>
+          <p> {{ ask.birth | date:"MM/dd/yyyy" }} </p>
+        </div>
+      </div>
+      <div class="spacer" style="width: 300px; height: 18px;"></div>
+      <div id="home-button-bar1" class="button-bar" >
+       <div ng-if="reponse.id == askId">
+       <button ng-click="add()" id="home-button14" class="button button-energized button-block icon-right ion-android-done">I love you</button>
+       </div>
+       <button ng-click="cancel()" id="home-button17" class="button button-royal button-block icon-right ion-android-close">Sorry</button>
+     </div>
+    </form>
+
+    <div  ng-if="!ask.id" >
+      <img src="img/point.png" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+    </div>
+
+  </ion-content>
+</ion-view>

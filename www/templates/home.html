@@ -1,0 +1,23 @@
+<ion-view title="Home" id="page2">
+  <ion-content padding="true" style="background: url(img/OVEEl3iNQZSgqGEO3evv_splase.png) no-repeat center;background-size:cover;" class="has-header">
+
+    <div class="list">
+      <a class="item item-thumbnail-left" href="#">
+        <img src="http://lorempixel.com/400/200/nature/">
+        <h2>{{ reponse.lastname|lowercase }} {{ reponse.firstname|lowercase }}</h2>
+        <p> {{ reponse.birth | date:"MM/dd/yyyy" }} </p>
+      </a>
+      <a ng-if="partern.lastname" class="item item-thumbnail-left" href="#">
+        <img src="http://lorempixel.com/400/200/cats/">
+        <h2>{{ partern.lastname|lowercase }} {{ partern.firstname|lowercase }}</h2>
+        <p> {{ partern.birth | date:"MM/dd/yyyy" }} </p>
+      </a>
+    </div>
+    <!-- <div id="home-button-bar1" class="button-bar">
+      <button id="home-button14" class="button button-energized button-block icon-right ion-eye" ng-click="public()" >Public</button>
+      <button id="home-button17" class="button button-royal button-block icon-right ion-eye-disabled" ng-click="private()">Private</button>
+    </div> -->
+    <button id="home-button10" style="font-weight:300;font-size:25px;" class="button button-assertive button-block icon-right ion-heart-broken" ng-click="break()">BreakUp</button>
+    <hr style="color:red;">
+  </ion-content>
+</ion-view>
