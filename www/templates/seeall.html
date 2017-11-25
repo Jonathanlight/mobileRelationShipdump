@@ -1,0 +1,17 @@
+<ion-view title="All Couple" id="page6">
+  <ion-content padding="true" style="background: url(img/bGUS62MhRQ6AxvF7tEpz_splase.png) no-repeat center;background-size:cover;" class="has-header">
+    <div class="spacer" style="width: 300px; height: 22px;"></div>
+    <form id="search-form8" class="list">
+      <label class="item item-input" id="search-search3" style="">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input placeholder="" type="search" ng-model="namefiltre">
+      </label>
+    </form>
+    <ion-list id="search-list10">
+      <ion-item ng-repeat="user in resultats | filter : namefiltre" class="item-icon-right" id="search-list-item38" style="">
+        {{ user.lastname }} {{ user.firstname }} <span style="font-size:9px;">{{ user.email }}</span>
+        <i class="icon ion-person"></i>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

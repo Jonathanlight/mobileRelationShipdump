@@ -30,6 +30,11 @@ angular.module('app.services', [])
             return $http.get(host + "utilisateur/" + id )
         },
 
+        getAllUser: function() {
+            var host = "https://ceptronbox.com/"
+            return $http.get(host + "utilisateur")
+        },
+
         putUpdatePassword: function(newData, id) {
             var host = "https://ceptronbox.com/"
             return $http.post(host + "password/" + id , newData)

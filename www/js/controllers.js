@@ -3,14 +3,13 @@ angular.module('app.controllers', [])
 .controller('homeCtrl', ['$scope', '$stateParams', '$ionicPopup', 'RelationFactory', 'UpdateFactory',
 function ($scope, $stateParams, $ionicPopup, RelationFactory, UpdateFactory) {
 
-
   setInterval(function(){
     RelationFactory.getShowlove($scope.reponse.id).success(function(response) {
         $scope.partern = response[0];
     }).error(function(error) {
         $scope.partern = " ? ";
     });
-  }, 500);
+  }, 1000);
 
   setInterval(function(){
     UpdateFactory.getUser($scope.reponse.id).success(function(response) {
@@ -18,12 +17,9 @@ function ($scope, $stateParams, $ionicPopup, RelationFactory, UpdateFactory) {
       $scope.reponse.lastname = response.lastname ;
       $scope.reponse.phone = response.phone ;
     }).error(function(error) {
-      $ionicPopup.alert({
-          title: 'Error',
-          template: "Connexion lost ^_^"
-      });
+      console.log("home get user");
     });
-  }, 500);
+  }, 5000);
 
   $scope.break = function() {
     RelationFactory.getBreakup($scope.reponse.id).success(function(response) {
@@ -34,7 +30,7 @@ function ($scope, $stateParams, $ionicPopup, RelationFactory, UpdateFactory) {
     }).error(function(error) {
         $ionicPopup.alert({
             title: 'Error',
-            template: "Connexion lost ^_^"
+            template: "Connexion lost ^_^ Home ^"
         });
     });
   };
@@ -87,14 +83,10 @@ function ($scope, $stateParams, RelationFactory, AskFactory, $ionicPopup) {
         $scope.ask = response[0][0];
         $scope.askId = response[1];
       }
-      console.log($scope.ask, $scope.askId);
     }).error(function(error) {
-      $ionicPopup.alert({
-          title: 'Error',
-          template: "Connexion lost ^_^"
-      });
+      console.log("seeask");
     });
-  }, 500);
+  }, 1000);
 
 
 }])
@@ -126,7 +118,6 @@ function ($scope, $stateParams, UpdateFactory, $ionicPopup, $state) {
           phone: $scope.$$childTail.phone
       };
       UpdateFactory.postUpdate(Objetdata, $scope.id).success(function(response) {
-        console.log(response);
           $ionicPopup.alert({
               title: 'Information',
               template: "Update Valide"
@@ -134,7 +125,7 @@ function ($scope, $stateParams, UpdateFactory, $ionicPopup, $state) {
       }).error(function(error) {
         $ionicPopup.alert({
             title: 'Error',
-            template: "Connexion lost ^_^"
+            template: "Connexion lost ^_^ Setting"
         });
       });
   };
@@ -217,14 +208,23 @@ function ($scope, $stateParams, UpdateFactory, $ionicPopup, $state) {
     }
 ])
 
-.controller('loginCtrl', ['$scope', '$stateParams', 'LoginFactory', '$ionicPopup', '$state', '$http',
-    function($scope, $stateParams, LoginFactory, $ionicPopup, $state, $http) {
+.controller('loginCtrl', ['$scope', '$stateParams', 'LoginFactory', '$ionicPopup', '$state', '$http','$timeout', '$ionicLoading',
+    function($scope, $stateParams, LoginFactory, $ionicPopup, $state, $http, $timeout, $ionicLoading) {
         function checkEmail(email) {
             var re = /\S+@\S+\.\S+/;
             return re.test(email);
         }
 
         $scope.connexion = function() {
+            // Setup the loader
+            $ionicLoading.show({
+              content: 'Loading',
+              animation: 'fade-in',
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0
+            });
+
             if (typeof this.email !== "undefined" && typeof this.password !== "undefined") {
                 if (true === checkEmail(this.email)) {
                     var Objetdata = {
@@ -232,21 +232,23 @@ function ($scope, $stateParams, UpdateFactory, $ionicPopup, $state) {
                         password: this.password
                     };
                     LoginFactory.getConnexion(Objetdata).success(function(response) {
-                      console.log(response[0]);
                       if (response[0].id) {
+                        $ionicLoading.hide();
                         $state.go('tabs.home', { 'datas': response });
                       }else{
                         $ionicPopup.alert({
                             title: 'Error',
                             template: "Email or Password is invalid"
                         });
+                        $ionicLoading.hide();
                       }
 
                     }).error(function(error) {
                         $ionicPopup.alert({
                             title: 'Error',
-                            template: "Email or Password is invalid"
+                            template: "Connexion failed"
                         });
+                        $ionicLoading.hide();
                     });
 
                 } else {
@@ -254,12 +256,14 @@ function ($scope, $stateParams, UpdateFactory, $ionicPopup, $state) {
                         title: 'Error',
                         template: 'E-mail is not Valide !'
                     });
+                    $ionicLoading.hide();
                 }
             } else {
                 $ionicPopup.alert({
                     title: 'Error',
                     template: 'E-mail or Password is Empty !'
                 });
+                $ionicLoading.hide();
             }
         };
     }
@@ -298,15 +302,43 @@ function ($scope, $stateParams, AskFactory, $ionicPopup) {
 
 }])
 
-.controller('tabsCtrl', ['$scope', '$stateParams', '$state',
-    function($scope, $stateParams, $state) {
+.controller('seeallCtrl', ['$scope', '$stateParams', 'UpdateFactory',
+function ($scope, $stateParams, UpdateFactory) {
+
+  UpdateFactory.getAllUser().success(function(response) {
+    $scope.resultats = response;
+  }).error(function(error) {
+    console.log("home All get user");
+  });
+
+}])
+
+.controller('tabsCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$ionicLoading', '$ionicHistory', '$ionicLoading',
+    function($scope, $stateParams, $state, $timeout, $ionicLoading, $ionicHistory) {
 
         $scope.reponse = $state.params.datas[0];
         setInterval(function(){ $scope.reponse }, 3000);
 
         $scope.logout = function() {
-            $state.go('login', {});
+          // Setup the loader
+          $ionicLoading.show({
+            content: 'Loading',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 200,
+            showDelay: 0
+          });
+
             $scope.reponse = "";
+            $ionicLoading.show({template:'Logging out....'});
+            $timeout(function () {
+                $ionicHistory.clearCache();
+                $ionicHistory.clearHistory();
+                $ionicHistory.nextViewOptions({ disableBack: true, historyRoot: true });
+                $state.go('login', {}, {reload: true});
+                $ionicLoading.hide();
+                //location.reload();
+            },30);
         }
     }
 ])
